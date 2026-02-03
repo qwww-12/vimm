@@ -5,6 +5,7 @@ import { menu } from "./commands/menu.js"
 import { tag } from "./commands/tag.js"
 import { thidden } from "./commands/thidden.js"
 import { timage } from "./commands/timage.js"
+import { logtime } from "./commands/logtime.js"
 import { compare_cmd } from "./utils.js"
 
 const { makeWASocket, useMultiFileAuthState, DisconnectReason } = baileys
@@ -69,6 +70,10 @@ async function startWhatsApp() {
 
         if (compare_cmd(text, '-timage')) {
             timage(sock, msg);
+        }
+
+        if (compare_cmd(text, '-logtime')) {
+            logtime(sock, msg);
         }
     })
 }
