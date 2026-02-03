@@ -1,5 +1,7 @@
 import readline from 'readline'
-import makeWASocket from '@whiskeysockets/baileys'
+import makeWASocket, { useMultiFileAuthState } from '@whiskeysockets/baileys'
+
+let pn;
 
 function PnIsCorrect(pn){
     for (let i = 0; i < pn.length; i++){
@@ -31,7 +33,6 @@ function getNumber(){
 }
 
 async function main(){
-    let pn;
     while (true){
         try {
             pn = await getNumber();
@@ -50,13 +51,23 @@ async function main(){
         printQRInTerminal: false
     });
 
-    sock.ev.on('creds.update', saveCreds);
+sock.ev.on('connection.update', async (update) => {
+    const { connection } = update
 
-    if (!sock.authState.creds.registered) {
-        const number = String(pn);
-        const code = await sock.requestPairingCode(number)
-        console.log(code)
+    if (connection === 'open') {
+        console.log('Connected!')
     }
+
+    if (connection === 'connecting') {
+        console.log('Connecting...')
+    }
+})
+
+setTimeout(async () => {
+    const code = await sock.requestPairingCode(pn)
+    console.log('PAIRING CODE:', code)
+}, 3000)
+
 }
 
 main();
