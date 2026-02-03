@@ -42,9 +42,15 @@ async function main(){
         }
     }
 
+    const { state, saveCreds } =
+        await useMultiFileAuthState('./sessions/auth-session');
+
     const sock = makeWASocket({
+        auth: state,
         printQRInTerminal: false
     });
+
+    sock.ev.on('creds.update', saveCreds);
 
     if (!sock.authState.creds.registered) {
         const number = String(pn);
