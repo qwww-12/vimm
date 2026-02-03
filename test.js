@@ -1,11 +1,14 @@
 import * as baileys from "@whiskeysockets/baileys"
 import P from "pino"
 import qrcode from "qrcode-terminal"
+import { menu } from "./commands/menu.js"
+import { tag } from "./commands/tag.js"
+import { hidetag } from "./commands/hidetag.js"
+import { allgroup } from "./commands/all.js"
 
 const { makeWASocket, useMultiFileAuthState } = baileys
 
 async function startWhatsApp() {
-    // هنا غادي نخزنو الجلسة
     const { state, saveCreds } = await useMultiFileAuthState("./auth-session")
 
     const sock = makeWASocket({
@@ -14,10 +17,8 @@ async function startWhatsApp() {
         browser: ["Ubuntu", "Chrome", "20.0.0"]
     })
 
-    // تحديث الجلسة
     sock.ev.on("creds.update", saveCreds)
 
-    // متابعة حالة الاتصال و QR
     sock.ev.on("connection.update", update => {
         const { connection, qr } = update
         if (qr) {
@@ -28,30 +29,24 @@ async function startWhatsApp() {
         if (connection === "close") console.log("❌ Connection closed")
     })
 
-    // التعامل مع الرسائل
     sock.ev.on("messages.upsert", async m => {
         const msg = m.messages[0]
         if (!msg.message) return
 
-        // جلب النص من الرسالة
         const text = msg.message.conversation || msg.message.extendedTextMessage?.text || ""
         console.log(`[MSG] ${msg.key.remoteJid}: ${text}`)
 
         if (text === ".menu") {
-            console.log("========= vimm ===========")
-            console.log(" hello vimm")
-
-            // اختيار jid صالح سواء DM أو Group
-            const jid = msg.key.remoteJid.includes("@g.us") 
-                        ? msg.key.remoteJid 
-                        : msg.key.participant || msg.key.remoteJid
-
-            // إرسال الرد مع catch لتجنب crash
-            try {
-                await sock.sendMessage(jid, { text: "Hello vimm" })
-            } catch (err) {
-                console.log("❌ Error sending message:", err.message)
-            }
+            menu(msg, sock);
+        }
+        if (text === ".tag") {
+            tag(msg, sock);
+        }
+        if (text === ".hidetag") {
+            hidetag(sock)
+        }
+        if (text === ".allgroup"){
+            allgroup(sock, msg);
         }
     })
 }
