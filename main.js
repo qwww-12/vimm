@@ -73,7 +73,7 @@ async function startWhatsApp() {
         }
 
         if (compare_cmd(text, '-logtime')) {
-            logtime(sock, msg);
+            await logtime(sock, msg);
         }
     })
 }
