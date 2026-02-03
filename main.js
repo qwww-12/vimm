@@ -46,10 +46,16 @@ async function main(){
     const { state, saveCreds } =
         await useMultiFileAuthState('./sessions/auth-session');
 
-    const sock = makeWASocket({
-        auth: state,
-        printQRInTerminal: false
-    });
+const sock = makeWASocket({
+    auth: state,
+  printQRInTerminal: true,
+  browser: ["Ubuntu", "Chrome", "20.0.04"],
+  connectTimeoutMs: 60000,
+  keepAliveIntervalMs: 25000,
+  defaultQueryTimeoutMs: 60000,
+  emitOwnEvents: true,
+  retryRequestDelayMs: 250
+});
 
 sock.ev.on('connection.update', async (update) => {
     const { connection } = update
