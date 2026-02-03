@@ -5,11 +5,11 @@ function ask(question) {
     })
 }
 
-export async function hidetag(sock, msg, text) {
+export async function thidden(sock, msg, text) {
     try {
         if (!sock || !sock.user) {
-            console.log('❌ WhatsApp not connected yet. Please wait...')
-            return
+            console.log('WhatsApp not connected yet. Please wait...');
+            return ;
         }
 
         const groupsData = await sock.groupFetchAllParticipating()
@@ -19,19 +19,21 @@ export async function hidetag(sock, msg, text) {
         }))
 
         if (groups.length === 0) {
-            console.log('❌ No groups found')
+            console.log('No groups found')
             return
         }
 
         console.log('📋 Your groups:')
-        groups.forEach((g, i) => console.log(`${i + 1}. ${g.subject}`))
+        groups.forEach((el, i) => {
+            console.log(`${i + 1}. ${el.subject}`);
+        })
 
         const choice = await ask('Enter the number of the group to hidetag: ')
         const groupIndex = parseInt(choice) - 1
         
         if (groupIndex < 0 || groupIndex >= groups.length) {
-            console.log('❌ Invalid number')
-            return
+            console.log('Invalid number');
+            return;
         }
 
         const groupId = groups[groupIndex].id
@@ -46,9 +48,9 @@ export async function hidetag(sock, msg, text) {
             mentions: participants
         })
 
-        console.log(`✅ Message sent and tagged all ${participants.length} members in ${groups[groupIndex].subject}`)
+        console.log(`Message sent and tagged all ${participants.length} members in ${groups[groupIndex].subject}`)
     } catch (err) {
-        console.error('❌ Error in hidetag function:', err.message)
+        console.error('Error in hidetag function:', err.message)
         
         if (err.message.includes('not-authorized')) {
             console.log('💡 Try re-authenticating by deleting ./auth-session folder')

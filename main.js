@@ -3,7 +3,8 @@ import P from "pino"
 import qrcode from "qrcode-terminal"
 import { menu } from "./commands/menu.js"
 import { tag } from "./commands/tag.js"
-import { hidetag } from "./commands/hidetag.js"
+import { thidden } from "./commands/thidden.js"
+import { timage } from "./commands/timage.js"
 import { compare_cmd } from "./utils.js"
 
 const { makeWASocket, useMultiFileAuthState, DisconnectReason } = baileys
@@ -54,19 +55,20 @@ async function startWhatsApp() {
         
         console.log(`📩 Message from ${msg.key.remoteJid}: "${text}"`)
         
-        if (compare_cmd(text, 'rmenu')) {
-            console.log('🎯 Command: rmenu')
+        if (compare_cmd(text, '-menuu')) {
             menu(msg, sock)
         }
         
-        if (compare_cmd(text, 'rtag')) {
-            console.log('🎯 Command: rtag')
+        if (compare_cmd(text, '-tag')) {
             tag(msg, sock, text)
         }
         
-        if (compare_cmd(text, 'rhidetag')) {
-            console.log('🎯 Command: rhidetag')
-            await hidetag(sock, msg, text)
+        if (compare_cmd(text, '-thidden')) {
+            await thidden(sock, msg, text)
+        }
+
+        if (compare_cmd(text, '-timage')) {
+            timage(sock, msg);
         }
     })
 }
