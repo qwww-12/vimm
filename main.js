@@ -1,4 +1,5 @@
 import readline from 'readline'
+import makeWASocket from '@whiskeysockets/baileys'
 
 function PnIsCorrect(pn){
     for (let i = 0; i < pn.length; i++){
@@ -30,14 +31,25 @@ function getNumber(){
 }
 
 async function main(){
+    let pn;
     while (true){
         try {
-            const pn = await getNumber();
+            pn = await getNumber();
             console.log(`Your number is ${pn}`)
             break;
         } catch (err) {
             console.log(err);
         }
+    }
+
+    const sock = makeWASocket({
+        printQRInTerminal: false
+    });
+
+    if (!sock.authState.creds.registered) {
+        const number = String(pn);
+        const code = await sock.requestPairingCode(number)
+        console.log(code)
     }
 }
 
