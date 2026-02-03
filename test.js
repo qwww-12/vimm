@@ -2,9 +2,6 @@ import { makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } from '
 import P from 'pino'
 import readline from 'readline'
 
-// =======================
-// Helper: سؤال فالترمينال
-// =======================
 async function ask(prompt) {
     const rl = readline.createInterface({
         input: process.stdin,
@@ -37,7 +34,7 @@ async function connectToWhatsApp() {
     const sock = makeWASocket({
         auth: state,
         logger: P({ level: 'silent' }),
-        printQRInTerminal: false, // false => نتحكم بالpairing code
+        printQRInTerminal: false,
         browser: ['MyBot', 'Chrome', '1.0.0'],
         version
     })
