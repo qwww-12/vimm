@@ -1,5 +1,9 @@
 import readline from 'readline'
-import makeWASocket, { useMultiFileAuthState } from '@whiskeysockets/baileys'
+import * as baileys from "@whiskeysockets/baileys"
+
+const { makeWASocket, useMultiFileAuthState } = baileys
+
+
 
 let pn;
 
