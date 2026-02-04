@@ -1,9 +1,10 @@
 // commands/logtime.js
 import axios from 'axios';
+import 'dotenv/config'
 
 // Configuration for 42 API
-const CLIENT_ID = 'YOUR_CLIENT_ID'; // Replace with your Client ID
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET'; // Replace with your Client Secret
+const CLIENT_ID = 'process.env.INTRA_CLIENT_ID';
+const CLIENT_SECRET = 'process.env.INTRA_CLIENT_SECRET'; 
 
 let accessToken = null;
 let tokenExpiry = null;

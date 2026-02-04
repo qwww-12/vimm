@@ -28,7 +28,7 @@ export async function timage(sock, msg){
             console.log(`${i + 1}. ${el.subject}`);
         });
 
-        const choice = await ask('Enter the number of the group to hidetag: ');
+        const choice = await ask('Enter index of group: ');
         const groupIndex = parseInt(choice) - 1;
 
         if (groupIndex < 0 || groupIndex >= groups.length){
@@ -41,7 +41,7 @@ export async function timage(sock, msg){
         const participants = groupMetadata.participants.map(p => p.id);
 
         await sock.sendMessage(groupId, {
-            image: { url: './image.jpg' },
+            image: { url: './image/a.jpg' },
             mentions: participants
         });
     } catch(err){

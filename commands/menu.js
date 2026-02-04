@@ -10,7 +10,6 @@ export async function menu(msg, sock){
     🏷️ *Owner:* Ayoub
     🌐 *Mode:* Public
     ⚙️ *Version:* 0.1
-    💻 *Platform:* Node.js
     
     ────────────────────
     
