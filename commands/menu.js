@@ -34,13 +34,6 @@ export async function menu(msg, sock){
     • .autotyping
     • .autorecording
     
-    🌸 *ANIME & FUN*
-    • .waifu
-    • .hug
-    • .kiss
-    • .dance
-    • .wink
-    
     ────────────────────
     
     ╮──────────────╭

@@ -54,9 +54,12 @@ async function startWhatsApp() {
         
         if (!text) return
         
+        console.log('=====================================================')
         console.log(`📩 Message from ${msg.key.remoteJid}: "${text}"`)
-        
-        if (compare_cmd(text, '-menuu')) {
+        console.log('=====================================================')
+      
+        console.log(`${msg.pushName} try run command ${text}`);
+        if (compare_cmd(text, '-menuu') && msg.key.fromMe) {
             menu(msg, sock)
         }
         
