@@ -1,12 +1,17 @@
 import * as baileys from "@whiskeysockets/baileys"
 import P from "pino"
 import qrcode from "qrcode-terminal"
-import { menu } from "./commands/menu.js"
-import { tag } from "./commands/tag.js"
-import { thidden } from "./commands/thidden.js"
-import { timage } from "./commands/timage.js"
-import { logtime } from "./commands/logtime.js"
-import { compare_cmd } from "./utils.js"
+import { all_commands, compare_cmd, flag_connected } from "./utils/utils.js"
+
+// const _log = console.log
+// console.log = (...args) => {
+//     const msg = args.join(' ')
+//     if (!msg.includes('Session') && !msg.includes('Closing') && !msg.includes('Ratchet')) {
+//         _log(...args)
+//     }
+// }
+
+let one = true;
 
 const { makeWASocket, useMultiFileAuthState, DisconnectReason } = baileys
 
@@ -30,8 +35,10 @@ async function startWhatsApp() {
         }
         
         if (connection === "open") {
-            console.log("Connected to WhatsApp")
-            console.log("Bot is ready! Send commands in any chat.")
+            await sock.sendMessage(sock.user.id, {
+                text: `        \`Vimm Bot\`\n *Hello ${sock.user.name} Vimm bot is connected*`
+            });
+            console.log("Connected to WhatsApp");
         }
         
         if (connection === "close") {
@@ -52,32 +59,21 @@ async function startWhatsApp() {
         const text = msg.message.conversation || 
                      msg.message.extendedTextMessage?.text || ""
         
-        if (!text) return
+        if (!text) 
+            return ;
         
-        console.log('=====================================================')
-        console.log(`📩 Message from ${msg.key.remoteJid}: "${text}"`)
-        console.log('=====================================================')
-      
-        console.log(`${msg.pushName} try run command ${text}`);
-        if (compare_cmd(text, '-menuu') && msg.key.fromMe) {
-            menu(msg, sock)
+                // if (compare_cmd(text, '.timage')) {
+                //     if (Mee(sock, msg, text)){
+                //         timage(sock, msg);
+                //     }
+                // }
+        if (one === true){
+            flag_connected(sock);
+            console.log('Vimm is ready');
+            one = false;
         }
-        
-        if (compare_cmd(text, '-tag')) {
-            tag(msg, sock, text)
-        }
-        
-        if (compare_cmd(text, '-thidden')) {
-            await thidden(sock, msg, text)
-        }
-
-        if (compare_cmd(text, '-timage')) {
-            timage(sock, msg);
-        }
-
-        if (compare_cmd(text, '-logtime')) {
-            await logtime(sock, msg);
-        }
+        // console.log(`message ${text}`);
+        all_commands(sock, msg, text);
     })
 }
 
