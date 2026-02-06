@@ -13,50 +13,52 @@ export function compare_cmd(str, cmd){
     return (true);
 }
 
-export async function flag_connected(sock){
-    const dsg = `            \`Vimm Bot\`\n*Hello ${sock.user.name} Vimm bot is ready to process commands*`;
+export async function flag_status(sock, flag, myid){
+    const messages = [`Vim is connected`, `Vimm is ready to process commands`];
 
-    await sock.sendMessage(sock.user.id, {
-        text: dsg
+    await sock.sendMessage(myid, {
+        text: messages[flag]
     });
 }
 
-async function Mee(sock, msg, cmd){
-    if (!msg.key.fromMe){
-        await sock.sendMessage(sock.user.id, {
+async function Mee(sock, msg, cmd, myid){
+    console.log('the message is form me or no: ' + msg.key.fromMe);
+    if (msg.key.fromMe === false){
+        await sock.sendMessage(myid, {
             text: `          \`Vimm Bot\`\n*${msg.pushName} try ${cmd}*`
         });
         return (false);
     }
+    for (let m = 0; m < 100; m++)
+    {
+        console.log(m);
+    }
+    console.log('return true');
     return (true);
 }
 
-export async function all_commands(sock, msg, text){
+export async function all_commands(sock, msg, text, myid){
 
-        if (compare_cmd(text, '.menuu')) {
-            if (Mee(sock, msg, text)){
+        if (compare_cmd(text, '.menu')) {
+            if (await Mee(sock, msg, text, myid) === true){
                 menu(msg, sock);
             }
         }
-            
         if (compare_cmd(text, '.tag')) {
-            if (Mee(sock, msg, text)){
+            if (await Mee(sock, msg, text, myid) === true){
                 tag(msg, sock, text);
             }
         }
-            
         if (compare_cmd(text, '.thidden')) {
-            if (Mee(sock, msg, text)){
+            if (await Mee(sock, msg, text, myid) === true){
                 await thidden(sock, msg, text);
             }
         }
-    
         if (compare_cmd(text, '.timage')) {
-            if (Mee(sock, msg, text)){
+            if (await Mee(sock, msg, text, myid) === true){
                 timage(sock, msg);
             }
         }
-    
         if (compare_cmd(text, '.logtime')) {
                 await logtime(sock, msg);
         }

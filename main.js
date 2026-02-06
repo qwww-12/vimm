@@ -1,7 +1,7 @@
 import * as baileys from "@whiskeysockets/baileys"
 import P from "pino"
 import qrcode from "qrcode-terminal"
-import { all_commands, compare_cmd, flag_connected } from "./utils/utils.js"
+import { all_commands, compare_cmd, flag_status } from "./utils/utils.js"
 
 // const _log = console.log
 // console.log = (...args) => {
@@ -10,20 +10,22 @@ import { all_commands, compare_cmd, flag_connected } from "./utils/utils.js"
 //         _log(...args)
 //     }
 // }
-
+let myid;
 let one = true;
 
 const { makeWASocket, useMultiFileAuthState, DisconnectReason } = baileys
 
 async function startWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState("./auth-session")
-
+    
     const sock = makeWASocket({
         auth: state,
         logger: P({ level: "silent" }),
         browser: ["Ubuntu", "Chrome", "20.0.0"]
     })
-
+    
+    let get_id = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+    myid = get_id;
     sock.ev.on("creds.update", saveCreds)
 
     sock.ev.on("connection.update", async (update) => {
@@ -35,12 +37,10 @@ async function startWhatsApp() {
         }
         
         if (connection === "open") {
-            await sock.sendMessage(sock.user.id, {
-                text: `        \`Vimm Bot\`\n *Hello ${sock.user.name} Vimm bot is connected*`
-            });
+            await flag_status(sock, 0, myid);
             console.log("Connected to WhatsApp");
         }
-        
+
         if (connection === "close") {
             const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
             console.log("Connection closed, reconnecting:", shouldReconnect)
@@ -58,22 +58,13 @@ async function startWhatsApp() {
         
         const text = msg.message.conversation || 
                      msg.message.extendedTextMessage?.text || ""
-        
         if (!text) 
             return ;
-        
-                // if (compare_cmd(text, '.timage')) {
-                //     if (Mee(sock, msg, text)){
-                //         timage(sock, msg);
-                //     }
-                // }
         if (one === true){
-            flag_connected(sock);
-            console.log('Vimm is ready');
+            await flag_status(sock, 1, myid);
             one = false;
         }
-        // console.log(`message ${text}`);
-        all_commands(sock, msg, text);
+        all_commands(sock, msg, text, myid);
     })
 }
 

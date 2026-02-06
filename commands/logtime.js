@@ -117,7 +117,6 @@ async function getUserLogtime(username) {
     }
 }
 
-// Main command
 export async function logtime(sock, msg) {
     const chatId = msg.key.remoteJid;
     
