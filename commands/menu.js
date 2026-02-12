@@ -12,28 +12,13 @@ export async function menu(msg, sock){
     ⚙️ *Version:* 0.1
     
     ────────────────────
-    
-    🛡️ *ADMIN & MODERATION*
-    • .add
-    • .promote
-    • .demote
-    • .kick
-    • .ban / .unban
-    • .warn / .resetwarn
-    • .mute / .unmute
-    
+    🏠 *Menu*
+    • .menu
+
     💬 *GROUP TOOLS*
-    • .groupinfo
-    • .tagall
+    • .tag
     • .hidetag
-    • .link
-    • .invite
-    
-    ⚙️ *AUTOMATION*
-    • .autoread
-    • .autotyping
-    • .autorecording
-    
+
     ────────────────────
     
       ╮──────────────╭
