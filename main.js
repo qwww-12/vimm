@@ -24,10 +24,8 @@ async function startWhatsApp() {
         browser: ["Ubuntu", "Chrome", "20.0.0"]
     })
     
-    let get_id = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-    myid = get_id;
     sock.ev.on("creds.update", saveCreds)
-
+    
     sock.ev.on("connection.update", async (update) => {
         const { connection, lastDisconnect, qr } = update
         
@@ -37,10 +35,12 @@ async function startWhatsApp() {
         }
         
         if (connection === "open") {
+            let get_id = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+            myid = get_id;
             await flag_status(sock, 0, myid);
             console.log("Connected to WhatsApp");
         }
-
+        
         if (connection === "close") {
             const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
             console.log("Connection closed, reconnecting:", shouldReconnect)
